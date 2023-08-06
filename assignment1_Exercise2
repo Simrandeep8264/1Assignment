@@ -1,0 +1,68 @@
+class WebPage {
+    String url;
+    String timestamp;
+
+    public WebPage(String url, String timestamp) {
+        this.url = url;
+        this.timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "URL: " + url + ", Timestamp: " + timestamp;
+    }
+}
+import java.util.Stack;
+
+class WebPageStack {
+    private Stack<WebPage> stack;
+
+    public WebPageStack() {
+        stack = new Stack<>();
+    }
+
+    public void addWebPage(WebPage webPage) {
+        stack.push(webPage);
+    }
+
+    public WebPage removeMostRecentWebPage() {
+        return stack.pop();
+    }
+
+    public WebPage peekMostRecentWebPage() {
+        return stack.peek();
+    }
+
+    public boolean isEmpty() {
+        return stack.isEmpty();
+    }
+
+    public int size() {
+        return stack.size();
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        WebPageStack webPageStack = new WebPageStack();
+
+        // Add web pages to the stack
+        WebPage webPage1 = new WebPage("https://www.example.com", "2023-07-20 10:30:00");
+        WebPage webPage2 = new WebPage("https://www.example.com/page2", "2023-07-20 11:15:00");
+        webPageStack.addWebPage(webPage1);
+        webPageStack.addWebPage(webPage2);
+
+        System.out.println("Stack size: " + webPageStack.size());
+
+        // Remove the most recent web page from the stack
+        WebPage removedWebPage = webPageStack.removeMostRecentWebPage();
+        System.out.println("Removed web page: " + removedWebPage);
+        System.out.println("Stack size: " + webPageStack.size());
+
+        // Print the most recent web page without removing it from the stack
+        WebPage mostRecentWebPage = webPageStack.peekMostRecentWebPage();
+        System.out.println("Most recent web page: " + mostRecentWebPage);
+
+        // Check if the stack is empty
+        System.out.println("Is stack empty? " + webPageStack.isEmpty());
+    }
+}
