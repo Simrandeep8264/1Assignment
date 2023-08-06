@@ -1,0 +1,79 @@
+class Action {
+    String type;
+    String parameters;
+
+    public Action(String type, String parameters) {
+        this.type = type;
+        this.parameters = parameters;
+    }
+
+    @Override
+    public String toString() {
+        return "Type: " + type + ", Parameters: " + parameters;
+    }
+}
+import java.util.Stack;
+
+class DrawingApp {
+    private Stack<Action> undoStack;
+    private Stack<Action> redoStack;
+
+    public DrawingApp() {
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
+    }
+
+    public void addActionToUndoStack(Action action) {
+        undoStack.push(action);
+        redoStack.clear(); // Clear the redo stack when a new action is added to the undo stack
+    }
+
+    public Action removeFromUndoStackAndAddToRedoStack() {
+        Action removedAction = undoStack.pop();
+        redoStack.push(removedAction);
+        return removedAction;
+    }
+
+    public Action removeFromRedoStackAndAddToUndoStack() {
+        Action removedAction = redoStack.pop();
+        undoStack.push(removedAction);
+        return removedAction;
+    }
+
+    public Action peekUndoStack() {
+        return undoStack.peek();
+    }
+
+    public void printMostRecentAction() {
+        if (!undoStack.isEmpty()) {
+            System.out.println("Most recent action: " + undoStack.peek());
+        }
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        DrawingApp drawingApp = new DrawingApp();
+
+        // Add actions to the undo stack
+        drawingApp.addActionToUndoStack(new Action("draw", "x=100, y=200, color=blue"));
+        drawingApp.addActionToUndoStack(new Action("move", "shape=rectangle, x=150, y=250"));
+        drawingApp.addActionToUndoStack(new Action("resize", "shape=circle, radius=50"));
+
+        // Print the most recent action without removing it from the undo stack
+        drawingApp.printMostRecentAction();
+
+        // Remove the most recent action from the undo stack and add it to the redo stack
+        Action removedAction = drawingApp.removeFromUndoStackAndAddToRedoStack();
+        System.out.println("Removed action: " + removedAction);
+
+        // Print the most recent action again
+        drawingApp.printMostRecentAction();
+
+        // Remove the most recent action from the redo stack and add it to the undo stack
+        removedAction = drawingApp.removeFromRedoStackAndAddToUndoStack();
+        System.out.println("Removed action from redo stack: " + removedAction);
+
+        // Print the most recent action again
+        drawingApp.printMostRecentAction();
+    }
+}
