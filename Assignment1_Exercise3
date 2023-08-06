@@ -1,0 +1,77 @@
+class Order {
+    String customerName;
+    String drinkType;
+    String size;
+
+    public Order(String customerName, String drinkType, String size) {
+        this.customerName = customerName;
+        this.drinkType = drinkType;
+        this.size = size;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer: " + customerName + ", Drink: " + drinkType + ", Size: " + size;
+    }
+}
+import java.util.LinkedList;
+import java.util.Queue;
+
+class OrderQueue {
+    private Queue<Order> queue;
+
+    public OrderQueue() {
+        queue = new LinkedList<>();
+    }
+
+    public void addOrder(Order order) {
+        queue.add(order);
+    }
+
+    public Order removeNextOrder() {
+        return queue.poll();
+    }
+
+    public boolean isEmpty() {
+        return queue.isEmpty();
+    }
+
+    public int size() {
+        return queue.size();
+    }
+
+    public Order peekNextOrder() {
+        return queue.peek();
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        OrderQueue orderQueue = new OrderQueue();
+
+        // Add orders to the queue
+        Order order1 = new Order("Customer 1", "Latte", "Medium");
+        Order order2 = new Order("Customer 2", "Cappuccino", "Small");
+        orderQueue.addOrder(order1);
+        orderQueue.addOrder(order2);
+
+        System.out.println("Queue size: " + orderQueue.size());
+
+        // Remove the next order from the queue
+        Order removedOrder = orderQueue.removeNextOrder();
+        System.out.println("Removed order: " + removedOrder);
+
+        // Check if the queue is empty
+        System.out.println("Is queue empty? " + orderQueue.isEmpty());
+
+        // Print the next order without removing it from the queue
+        Order nextOrder = orderQueue.peekNextOrder();
+        System.out.println("Next order: " + nextOrder);
+
+        // Remove another order from the queue
+        Order removedOrder2 = orderQueue.removeNextOrder();
+        System.out.println("Removed order: " + removedOrder2);
+
+        // Check if the queue is empty
+        System.out.println("Is queue empty? " + orderQueue.isEmpty());
+    }
+}
