@@ -1,0 +1,121 @@
+class Book {
+    String title;
+    String author;
+    int publicationYear;
+
+    public Book(String title, String author, int publicationYear) {
+        this.title = title;
+        this.author = author;
+        this.publicationYear = publicationYear;
+    }
+
+    @Override
+    public String toString() {
+        return "Title: " + title + ", Author: " + author + ", Publication Year: " + publicationYear;
+    }
+}
+class Node {
+    Book data; // Book object
+    Node next; // Reference to the next node
+
+    public Node(Book book) {
+        data = book;
+        next = null;
+    }
+}
+
+class LinkedList {
+    Node head; // Reference to the first node in the linked list
+
+    // Method to add a book to the beginning of the linked list
+    public void addBookAtBeginning(Book book) {
+        Node newNode = new Node(book);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    // Method to add a book to the end of the linked list
+    public void addBookAtEnd(Book book) {
+        Node newNode = new Node(book);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node current = head;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = newNode;
+        }
+    }
+
+    // Method to remove a book from the beginning of the linked list
+    public Book removeBookFromBeginning() {
+        if (head == null) {
+            return null; // Empty list
+        }
+        Book removedBook = head.data;
+        head = head.next;
+        return removedBook;
+    }
+
+    // Method to remove a book from the end of the linked list
+    public Book removeBookFromEnd() {
+        if (head == null) {
+            return null; // Empty list
+        }
+        if (head.next == null) {
+            Book removedBook = head.data;
+            head = null;
+            return removedBook;
+        }
+        Node current = head;
+        while (current.next.next != null) {
+            current = current.next;
+        }
+        Book removedBook = current.next.data;
+        current.next = null;
+        return removedBook;
+    }
+
+    // Method to print the list of books in reverse order
+    public void printReverseOrder() {
+        printReverseOrderRecursively(head);
+    }
+
+    private void printReverseOrderRecursively(Node node) {
+        if (node == null) {
+            return;
+        }
+        printReverseOrderRecursively(node.next);
+        System.out.println(node.data);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        LinkedList bookList = new LinkedList();
+
+        bookList.addBookAtEnd(new Book("Book 1", "Author 1", 2000));
+        bookList.addBookAtEnd(new Book("Book 2", "Author 2", 2010));
+        bookList.addBookAtEnd(new Book("Book 3", "Author 3", 2020));
+
+        bookList.addBookAtBeginning(new Book("Book 0", "Author 0", 1990));
+
+        System.out.println("List of books:");
+        bookList.printReverseOrder();
+
+        System.out.println("\nRemoving a book from the beginning:");
+        Book removedBook = bookList.removeBookFromBeginning();
+        if (removedBook != null) {
+            System.out.println("Removed: " + removedBook);
+        }
+
+        System.out.println("\nRemoving a book from the end:");
+        removedBook = bookList.removeBookFromEnd();
+        if (removedBook != null) {
+            System.out.println("Removed: " + removedBook);
+        }
+
+        System.out.println("\nList of books after removal:");
+        bookList.printReverseOrder();
+    }
+}
