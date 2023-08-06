@@ -1,0 +1,182 @@
+class Song {
+    String title;
+    String artist;
+    int duration; // Duration in seconds
+
+    public Song(String title, String artist, int duration) {
+        this.title = title;
+        this.artist = artist;
+        this.duration = duration;
+    }
+
+    @Override
+    public String toString() {
+        return "Title: " + title + ", Artist: " + artist + ", Duration: " + duration + " seconds";
+    }
+}
+class Node {
+    Song data; // Song object
+    Node next; // Reference to the next node
+
+    public Node(Song song) {
+        data = song;
+        next = null;
+    }
+}
+
+class Playlist {
+    private Node head; // Reference to the first node in the playlist
+    private Node tail; // Reference to the last node in the playlist
+
+    public Playlist() {
+        head = null;
+        tail = null;
+    }
+
+    public void addSongAtBeginning(Song song) {
+        Node newNode = new Node(song);
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            newNode.next = head;
+            head = newNode;
+        }
+    }
+
+    public void addSongAtEnd(Song song) {
+        Node newNode = new Node(song);
+        if (tail == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
+        }
+    }
+
+    public Song removeSongFromBeginning() {
+        if (head == null) {
+            return null; // Empty playlist
+        }
+        Song removedSong = head.data;
+        if (head == tail) {
+            head = null;
+            tail = null;
+        } else {
+            head = head.next;
+        }
+        return removedSong;
+    }
+
+    public Song removeSongFromEnd() {
+        if (tail == null) {
+            return null; // Empty playlist
+        }
+        Song removedSong = tail.data;
+        if (head == tail) {
+            head = null;
+            tail = null;
+        } else {
+            Node current = head;
+            while (current.next != tail) {
+                current = current.next;
+            }
+            current.next = null;
+            tail = current;
+        }
+        return removedSong;
+    }
+
+    public void shufflePlaylist() {
+        // Convert the linked list to an array
+        Song[] songsArray = toArray();
+
+        // Shuffle the array
+        shuffleArray(songsArray);
+
+        // Convert the shuffled array back to a linked list
+        head = null;
+        tail = null;
+        for (Song song : songsArray) {
+            addSongAtEnd(song);
+        }
+    }
+
+    private Song[] toArray() {
+        int size = size();
+        Song[] songsArray = new Song[size];
+        Node current = head;
+        int index = 0;
+        while (current != null) {
+            songsArray[index++] = current.data;
+            current = current.next;
+        }
+        return songsArray;
+    }
+
+    private void shuffleArray(Song[] songsArray) {
+        Random random = new Random();
+        for (int i = songsArray.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            Song temp = songsArray[i];
+            songsArray[i] = songsArray[j];
+            songsArray[j] = temp;
+        }
+    }
+
+    public void printPlaylist() {
+        Node current = head;
+        while (current != null) {
+            System.out.println(current.data);
+            current = current.next;
+        }
+    }
+
+    public int size() {
+        int count = 0;
+        Node current = head;
+        while (current != null) {
+            count++;
+            current = current.next;
+        }
+        return count;
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Playlist playlist = new Playlist();
+
+        // Add songs to the playlist
+        Song song1 = new Song("Song 1", "Artist 1", 180);
+        Song song2 = new Song("Song 2", "Artist 2", 210);
+        Song song3 = new Song("Song 3", "Artist 3", 150);
+        playlist.addSongAtEnd(song1);
+        playlist.addSongAtEnd(song2);
+        playlist.addSongAtEnd(song3);
+
+        // Print the playlist
+        System.out.println("Playlist:");
+        playlist.printPlaylist();
+
+        // Add a song to the beginning of the playlist
+        Song newSong = new Song("New Song", "New Artist", 240);
+        playlist.addSongAtBeginning(newSong);
+
+        System.out.println("\nPlaylist after adding a song to the beginning:");
+        playlist.printPlaylist();
+
+        // Remove a song from the end of the playlist
+        Song removedSong = playlist.removeSongFromEnd();
+        System.out.println("\nRemoved song: " + removedSong);
+
+        System.out.println("\nPlaylist after removing a song from the end:");
+        playlist.printPlaylist();
+
+        // Shuffle the playlist
+        playlist.shufflePlaylist();
+
+        System.out.println("\nShuffled playlist:");
+        playlist.printPlaylist();
+    }
+}
